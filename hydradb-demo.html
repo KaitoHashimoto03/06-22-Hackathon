@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wellness Agent × HydraDB</title>
+<style>
+  :root {
+    --bg: #eef3fb;
+    --surface: #ffffff;
+    --ink: #0f1a36;
+    --ink-soft: #3a4a72;
+    --muted: #6b7ea3;
+    --line: #ccd6ea;
+    --accent: #3257e6;
+    --accent-soft: #dde5ff;
+    --teal: #0d9b86;
+    --teal-soft: #cdeee6;
+    --coral: #e85a48;
+    --coral-soft: #ffd8d2;
+    --amber: #d8881a;
+    --amber-soft: #ffe2b4;
+    --violet: #6240e0;
+    --violet-soft: #e1d8ff;
+    --hydra: #6240e0;
+    --hydra-soft: #f1edff;
+    --hydra-line: #b9a8f0;
+    --shadow: 0 14px 36px rgba(15, 26, 54, 0.10);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(800px 460px at 95% -10%, #c9dafc 0%, transparent 55%),
+      radial-gradient(600px 420px at -10% 110%, #c9efe6 0%, transparent 50%),
+      linear-gradient(180deg, #eef3fb 0%, #dde7f7 100%);
+    background-attachment: fixed;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 20px 28px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(135deg, #2b3fc4 0%, #3a78d6 55%, #1ca99a 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 16px 24px;
+    box-shadow: 0 18px 40px rgba(30, 50, 130, 0.22);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 18px;
+  }
+  .tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .tag .dot { width: 8px; height: 8px; border-radius: 50%;
+    background: #ffe27a; box-shadow: 0 0 0 4px rgba(255,226,122,0.3); }
+  h1 {
+    margin: 8px 0 4px;
+    font-size: 24px; line-height: 1.2; letter-spacing: -0.01em;
+  }
+  h1 .grad {
+    background: linear-gradient(90deg, #ffe27a 0%, #b3f0e3 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { margin: 0; font-size: 13px; color: rgba(255,255,255,0.94); max-width: 760px; }
+
+  .hero-meta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .chip {
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: #fff; font-size: 12px;
+    min-width: 130px;
+  }
+  .chip .k { font-size: 10px; opacity: 0.8; letter-spacing: 0.08em; text-transform: uppercase; }
+  .chip .v { font-weight: 700; margin-top: 2px; }
+
+  /* ---------- Section shells ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 16px 18px;
+  }
+  .eyebrow {
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .card h3 {
+    margin: 2px 0 4px;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+  }
+  .card .note { color: var(--muted); font-size: 12px; margin: 0; }
+
+  /* ---------- Workflow strip (compact, 8 chips one row) ---------- */
+  .wf {
+    margin-top: 14px;
+    padding: 14px 18px;
+  }
+  .wf-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin-bottom: 10px;
+  }
+  .wf-head .ttl { font-size: 13px; font-weight: 700; }
+  .wf-head .ttl b { color: var(--accent); }
+  .wf-steps {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+    align-items: stretch;
+  }
+  .wf-step {
+    background: #f4f6fc;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 7px 8px;
+    font-size: 11.5px;
+    display: flex; flex-direction: column; gap: 2px;
+    position: relative;
+  }
+  .wf-step .n {
+    font-size: 9.5px; font-weight: 800;
+    color: var(--accent); letter-spacing: 0.08em;
+  }
+  .wf-step .t { font-weight: 700; color: var(--ink); font-size: 12px; }
+  .wf-step.h { background: var(--hydra-soft); border-color: var(--hydra-line); }
+  .wf-step.h .n { color: var(--hydra); }
+
+  /* ---------- HydraDB scope (the star) ---------- */
+  .scope {
+    margin-top: 14px;
+    background: var(--hydra-soft);
+    border: 2px solid var(--hydra-line);
+    border-radius: 18px;
+    padding: 18px 20px 22px;
+    position: relative;
+  }
+  .scope-banner {
+    position: absolute;
+    top: -12px; left: 20px;
+    background: var(--hydra);
+    color: #fff;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    box-shadow: 0 6px 14px rgba(98, 64, 224, 0.30);
+  }
+  .scope-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 12px;
+  }
+  .scope-head h2 {
+    margin: 6px 0 2px;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .scope-head .lead {
+    margin: 0; color: var(--ink-soft); font-size: 13px;
+  }
+  .scope-stats {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .scope-stat {
+    background: #fff;
+    border: 1px solid var(--hydra-line);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .scope-stat b { color: var(--hydra); display: block; font-size: 13px; }
+
+  /* Scope body: inputs | graph | outputs */
+  .scope-body {
+    display: grid;
+    grid-template-columns: 130px 1fr 150px;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .pipe {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    justify-content: center;
+  }
+  .pipe .lbl { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 800; }
+  .pipe .item {
+    background: #f4f6fc;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 11.5px;
+    color: var(--ink);
+  }
+  .pipe.out .item { background: var(--accent-soft); border-color: #b4c4f7; }
+  .pipe .arrow-down {
+    text-align: center; color: var(--hydra); font-weight: 800; font-size: 14px; line-height: 1;
+  }
+
+  .graph-wrap {
+    position: relative;
+    background: #fff;
+    border: 1.5px dashed var(--hydra-line);
+    border-radius: 14px;
+    height: 360px;
+    overflow: hidden;
+  }
+  .graph-tag {
+    position: absolute; top: 8px; left: 10px;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--hydra);
+    background: var(--hydra-soft);
+    padding: 3px 8px; border-radius: 6px;
+    border: 1px solid var(--hydra-line);
+    z-index: 3;
+  }
+  .node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 2px solid var(--accent);
+    color: var(--ink);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 12px; font-weight: 700;
+    text-align: center;
+    box-shadow: 0 6px 14px rgba(15,26,54,0.10);
+    z-index: 2;
+    min-width: 100px;
+    white-space: nowrap;
+  }
+  .node small {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+  }
+  .node.user     { border-color: var(--ink); background: #f4f6fc; }
+  .node.session  { border-color: var(--accent); background: var(--accent-soft); }
+  .node.app      { border-color: var(--amber); background: var(--amber-soft); }
+  .node.posture  { border-color: var(--coral); background: var(--coral-soft); }
+  .node.focus    { border-color: var(--teal); background: var(--teal-soft); }
+  .node.interv   { border-color: var(--violet); background: var(--violet-soft); }
+  .node.feedback { border-color: #0a6e60; background: var(--teal-soft); }
+
+  .edges { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .edges svg { width: 100%; height: 100%; display: block; }
+  .edge-label {
+    fill: var(--ink-soft);
+    font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.04em;
+    font-family: inherit;
+  }
+
+  .path-call {
+    margin-top: 10px;
+    background: #fff;
+    border: 1px solid var(--hydra-line);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12px; color: var(--ink-soft);
+  }
+  .path-call b { color: var(--hydra); }
+  .path-call .arr { color: var(--hydra); font-weight: 800; margin: 0 2px; }
+
+  /* ---------- Bottom row ---------- */
+  .bottom {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr 1.4fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .why h3 { margin-bottom: 6px; }
+  .why-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 5px; }
+  .why-list li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 8px; align-items: start;
+    font-size: 11.5px; color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .why-list .ic {
+    width: 20px; height: 20px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--hydra-soft); color: var(--hydra);
+    font-weight: 800; font-size: 11px;
+    border: 1px solid var(--hydra-line);
+    margin-top: 1px;
+  }
+  .why-list b { color: var(--ink); font-weight: 700; }
+
+  .behavior { border-left: 4px solid var(--teal); }
+  .behavior.alert { border-left-color: var(--coral); }
+  .badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px;
+    margin-bottom: 4px;
+  }
+  .badge.calm  { background: var(--teal-soft);  color: #0a6e60; border: 1px solid #9ddfd0; }
+  .badge.alert { background: var(--coral-soft); color: #b53d2e; border: 1px solid #f4b3aa; }
+  .mini { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 3px; }
+  .mini li {
+    font-size: 11.5px; color: var(--ink-soft);
+    padding-left: 12px; position: relative; line-height: 1.45;
+  }
+  .mini li::before {
+    content: ""; position: absolute; left: 0; top: 7px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--teal);
+  }
+  .behavior.alert .mini li::before { background: var(--coral); }
+
+  .story {
+    background: linear-gradient(135deg, #2b3fc4 0%, #1ca99a 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-shadow: 0 14px 30px rgba(30,50,130,0.20);
+  }
+  .story .eyebrow { color: #ffe27a; }
+  .story h3 { color: #fff; margin: 2px 0; }
+  .story .note { color: rgba(255,255,255,0.88); }
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .beat {
+    background: rgba(255,255,255,0.96);
+    color: var(--ink);
+    border-radius: 9px;
+    padding: 8px 10px;
+  }
+  .beat .t { font-size: 9.5px; color: var(--accent); font-weight: 800; letter-spacing: 0.08em; }
+  .beat .h { font-size: 12px; font-weight: 700; margin-top: 2px; }
+  .beat .d { font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; line-height: 1.4; }
+
+  @media (max-width: 1100px) {
+    .hero, .scope-head { grid-template-columns: 1fr; }
+    .hero-meta, .scope-stats { justify-content: flex-start; }
+    .wf-steps { grid-template-columns: repeat(4, 1fr); }
+    .scope-body { grid-template-columns: 1fr; }
+    .graph-wrap { height: 460px; }
+    .bottom { grid-template-columns: 1fr 1fr; }
+    .story-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div>
+      <span class="tag"><span class="dot"></span> Wellness Agent × HydraDB</span>
+      <h1>An Electron agent that <span class="grad">listens before it speaks</span> — grounded by HydraDB.</h1>
+      <p class="lede">Camera-based posture + desktop signals every minute. HydraDB stores them as a graph and returns the reasoning path the agent uses to decide: stay silent, or suggest what worked last time.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="chip"><div class="k">Sampling</div><div class="v">1 / min · camera</div></div>
+      <div class="chip"><div class="k">Memory</div><div class="v">HydraDB graph</div></div>
+      <div class="chip"><div class="k">Decide</div><div class="v">Nebius LLM</div></div>
+    </div>
+  </header>
+
+  <!-- ============ WORKFLOW STRIP (compact) ============ -->
+  <div class="card wf">
+    <div class="wf-head">
+      <div class="ttl">Workflow · one loop per minute &nbsp;·&nbsp; <b>steps 3–5 run inside HydraDB</b></div>
+      <div class="eyebrow">Camera → HydraDB → Decision → Feedback</div>
+    </div>
+    <div class="wf-steps">
+      <div class="wf-step"><span class="n">01</span><span class="t">Capture</span></div>
+      <div class="wf-step"><span class="n">02</span><span class="t">Score risk</span></div>
+      <div class="wf-step h"><span class="n">03 · HydraDB</span><span class="t">Ingest</span></div>
+      <div class="wf-step h"><span class="n">04 · HydraDB</span><span class="t">Retrieve</span></div>
+      <div class="wf-step h"><span class="n">05 · HydraDB</span><span class="t">Graph path</span></div>
+      <div class="wf-step"><span class="n">06</span><span class="t">Decide</span></div>
+      <div class="wf-step"><span class="n">07</span><span class="t">Surface</span></div>
+      <div class="wf-step"><span class="n">08</span><span class="t">Learn</span></div>
+    </div>
+  </div>
+
+  <!-- ============ HYDRADB SCOPE (the hero of the page) ============ -->
+  <section class="scope">
+    <div class="scope-banner">⬢ HydraDB · Graph Memory Layer</div>
+
+    <div class="scope-head">
+      <div>
+        <div class="eyebrow" style="color: var(--hydra);">What lives inside HydraDB</div>
+        <h2>Memory is a graph, not a log.</h2>
+        <p class="lead">Every session connects apps, postures, focus, interventions and feedback — so the agent can recall <i>what worked last time</i>, not just <i>what happened</i>.</p>
+      </div>
+      <div class="scope-stats">
+        <div class="scope-stat"><b>5</b> node types</div>
+        <div class="scope-stat"><b>7</b> relations</div>
+        <div class="scope-stat"><b>1</b> reasoning path returned</div>
+      </div>
+    </div>
+
+    <div class="scope-body">
+      <!-- INPUTS -->
+      <div class="pipe">
+        <div class="lbl">Inputs → HydraDB</div>
+        <div class="item">posture frame</div>
+        <div class="item">active_app</div>
+        <div class="item">focus signals</div>
+        <div class="arrow-down">▼</div>
+      </div>
+
+      <!-- GRAPH -->
+      <div class="graph-wrap">
+        <span class="graph-tag">⬢ HydraDB</span>
+        <div class="edges">
+          <svg viewBox="0 0 1000 360" preserveAspectRatio="none">
+            <defs>
+              <marker id="ah" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#6240e0" />
+              </marker>
+            </defs>
+            <line x1="120" y1="180" x2="280" y2="180" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="138" y="172" class="edge-label">HAS_SESSION</text>
+
+            <line x1="340" y1="155" x2="530" y2="60" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="358" y="108" class="edge-label">USED_APP</text>
+
+            <line x1="360" y1="175" x2="530" y2="155" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="378" y="148" class="edge-label">HAS_POSTURE_EVENT</text>
+
+            <line x1="360" y1="200" x2="530" y2="245" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="378" y="238" class="edge-label">HAS_FOCUS_STATE</text>
+
+            <line x1="640" y1="150" x2="790" y2="185" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="660" y="158" class="edge-label">TRIGGERED</text>
+
+            <line x1="640" y1="245" x2="790" y2="210" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="660" y="242" class="edge-label">TRIGGERED</text>
+
+            <line x1="850" y1="220" x2="850" y2="320" stroke="#6240e0" stroke-width="2" marker-end="url(#ah)" />
+            <text x="858" y="278" class="edge-label">RECEIVED</text>
+          </svg>
+        </div>
+        <div class="node user"     style="left: 8%;  top: 50%;">User<small>identity</small></div>
+        <div class="node session"  style="left: 32%; top: 50%;">WorkSession<small>focus window</small></div>
+        <div class="node app"      style="left: 58%; top: 14%;">AppUsage<small>app · category</small></div>
+        <div class="node posture"  style="left: 58%; top: 42%;">PostureEvent<small>score · angles</small></div>
+        <div class="node focus"    style="left: 58%; top: 70%;">FocusState<small>trend · switches</small></div>
+        <div class="node interv"   style="left: 84%; top: 56%;">Intervention<small>walk · stretch</small></div>
+        <div class="node feedback" style="left: 84%; top: 90%;">Feedback<small>helpful · no</small></div>
+      </div>
+
+      <!-- OUTPUTS -->
+      <div class="pipe out">
+        <div class="lbl">HydraDB → Agent</div>
+        <div class="item">similar past cases</div>
+        <div class="item">graph context</div>
+        <div class="item">previous feedback</div>
+        <div class="item">reasoning path</div>
+        <div class="arrow-down">▼</div>
+      </div>
+    </div>
+
+    <div class="path-call">
+      <b>Reasoning path returned to the agent:</b>
+      &nbsp;PostureEvent <span class="arr">→</span> TRIGGERED <span class="arr">→</span> Intervention <span class="arr">→</span> RECEIVED <span class="arr">→</span> Feedback
+      <span style="color: var(--muted);">&nbsp;— grounds the next suggestion in what worked before.</span>
+    </div>
+  </section>
+
+  <!-- ============ BOTTOM ROW ============ -->
+  <div class="bottom">
+
+    <div class="card why">
+      <div class="eyebrow">Why HydraDB matters</div>
+      <h3>Memory, not decider.</h3>
+      <ul class="why-list">
+        <li><span class="ic">◎</span><div><b>Similar past cases</b> · posture + focus + app context.</div></li>
+        <li><span class="ic">⇄</span><div><b>Graph context</b> · connected session, app, intervention.</div></li>
+        <li><span class="ic">★</span><div><b>Previous feedback</b> · what this user accepted before.</div></li>
+        <li><span class="ic">↗</span><div><b>Patterns</b> · "walk beat posture-only alerts."</div></li>
+        <li><span class="ic">⇢</span><div><b>Reasoning path</b> · explains the recommendation.</div></li>
+      </ul>
+    </div>
+
+    <div class="card behavior">
+      <span class="badge calm">Default</span>
+      <h3>Quiet monitoring</h3>
+      <ul class="mini">
+        <li>Posture stable, focus steady.</li>
+        <li>No consecutive bad captures.</li>
+        <li>State silently logged to HydraDB.</li>
+        <li>UI: "You're in flow."</li>
+      </ul>
+    </div>
+
+    <div class="card behavior alert">
+      <span class="badge alert">Trigger</span>
+      <h3>When the agent speaks up</h3>
+      <ul class="mini">
+        <li>Posture worsens past baseline.</li>
+        <li>Focus drops · window switches rise.</li>
+        <li>Consecutive bad captures cross threshold.</li>
+        <li>HydraDB finds an intervention that worked.</li>
+      </ul>
+    </div>
+
+    <div class="story">
+      <span class="eyebrow">Demo · 4 beats</span>
+      <h3>A typical afternoon</h3>
+      <p class="note" style="margin:0 0 4px; font-size:12px;">Quiet → drift → HydraDB recall → grounded suggestion.</p>
+      <div class="story-grid">
+        <div class="beat"><div class="t">14:02</div><div class="h">Quiet</div><div class="d">Focused. Agent logs and stays silent.</div></div>
+        <div class="beat"><div class="t">14:34</div><div class="h">Drift</div><div class="d">Neck angle bad 3 captures in a row.</div></div>
+        <div class="beat"><div class="t">14:35</div><div class="h">Recall</div><div class="d">HydraDB: "2-min walk" worked last Tuesday.</div></div>
+        <div class="beat"><div class="t">14:35</div><div class="h">Speak</div><div class="d">"Try a 2-min walk — it helped last time."</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,8 +1,9 @@
-# Posture Review Desktop
+# Wellness Agent Desktop
 
-Electron app for a MacBook-camera posture loop.
+Electron desktop app for a MacBook-camera wellness loop, plus a HydraDB workflow
+demo page.
 
-It can:
+The current desktop app can:
 
 - open the webcam in an Electron desktop app
 - capture posture snapshots manually or every 3 seconds by default
@@ -34,7 +35,7 @@ npm test
 
 `npm test` does not require Electron or camera access.
 
-## Posture score
+## Posture Score
 
 The score is always an integer from 0 to 100. It is the sum of 10 indicators,
 each scored from 0 to 10:
@@ -60,9 +61,10 @@ from signals that are visible from the built-in camera: the head being low,
 too close to the camera, or forward relative to the shoulders when MediaPipe
 world landmarks are available.
 
-## LLM review
+## LLM Review
 
-By default the app uses a local review function and sends no image data outside the machine.
+By default the app uses a local review function and sends no image data outside
+the machine.
 
 To enable an OpenAI-compatible chat review, set all of these:
 
@@ -82,7 +84,31 @@ export POSTURE_REVIEW_MODEL="..."
 npm start
 ```
 
-Only numeric score data and posture reasons are sent to the review API. Webcam frames are not sent.
+Only numeric score data and posture reasons are sent to the review API. Webcam
+frames are not sent.
+
+## HydraDB Demo
+
+`hydradb-demo.html` is a visual walkthrough of the intended graph-memory layer.
+It shows how sessions, postures, focus states, interventions, and feedback can
+be stored as connected nodes so a wellness agent can recall what worked in a
+similar situation before surfacing a suggestion.
+
+The conceptual workflow is:
+
+```text
+01 Capture -> 02 Score risk -> 03 HydraDB Ingest -> 04 HydraDB Retrieve
+-> 05 HydraDB Graph path -> 06 Decide -> 07 Surface -> 08 Learn
+```
+
+The reasoning path returned to the agent looks like:
+
+```text
+PostureEvent -> TRIGGERED -> Intervention -> RECEIVED -> Feedback
+```
+
+Open [hydradb-demo.html](./hydradb-demo.html) in any modern browser to see the
+schema, relations, and memory flow.
 
 ## Notes
 
