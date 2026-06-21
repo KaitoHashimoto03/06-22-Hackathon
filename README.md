@@ -122,10 +122,7 @@ above and reduced to one integer in `0–100`. That score, plus the active
 app and focus signals, is what gets pushed into HydraDB at step **03
 Ingest** every minute.
 
-<video src="https://github.com/KaitoHashimoto03/06-22-Hackathon/raw/main/posture-scoring.mp4" controls muted playsinline width="100%">
-  Your browser doesn't render embedded video — open
-  <a href="./posture-scoring.mp4">posture-scoring.mp4</a> directly.
-</video>
+https://github.com/user-attachments/assets/c6168629-4de0-42fe-adff-1f9e8029a6da
 
 Nothing in this clip is sent to a server: the score is computed on-device
 and only the numeric score + reasons leave the machine (and only when an
