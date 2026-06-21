@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7ea3"/>
+    </marker>
+    <style>
+      .panel { fill:#f7f9fd; stroke:#ccd6ea; stroke-width:1.2; }
+      .chip  { fill:#ffffff; stroke:#ccd6ea; stroke-width:1.2; }
+      .chip-h{ fill:#f1edff; stroke:#b9a8f0; stroke-width:1.4; }
+      .n     { font-size:11px; font-weight:700; fill:#3257e6; letter-spacing:0.06em; }
+      .n-h   { font-size:11px; font-weight:700; fill:#6240e0; letter-spacing:0.06em; }
+      .t     { font-size:14px; font-weight:700; fill:#0f1a36; }
+      .ttl   { font-size:15px; font-weight:800; fill:#0f1a36; }
+      .sub   { font-size:11px; font-weight:700; fill:#6b7ea3; letter-spacing:0.12em; }
+      .line  { stroke:#6b7ea3; stroke-width:1.4; fill:none; }
+    </style>
+  </defs>
+
+  <rect x="8" y="8" width="1264" height="184" rx="16" class="panel"/>
+
+  <text x="32" y="38" class="ttl">Workflow · one loop per minute  ·  steps 3–5 run inside HydraDB</text>
+  <text x="32" y="58" class="sub">CAMERA → HYDRADB → DECISION → FEEDBACK</text>
+
+  <g transform="translate(44,96)">
+    <g><rect width="130" height="72" rx="12" class="chip"/>
+      <text x="14" y="26" class="n">01</text>
+      <text x="14" y="52" class="t">Capture</text></g>
+    <line x1="138" y1="36" x2="168" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(154,0)"><rect width="130" height="72" rx="12" class="chip"/>
+      <text x="14" y="26" class="n">02</text>
+      <text x="14" y="52" class="t">Score risk</text></g>
+    <line x1="292" y1="36" x2="322" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(308,0)"><rect width="130" height="72" rx="12" class="chip-h"/>
+      <text x="14" y="26" class="n-h">03 · HYDRADB</text>
+      <text x="14" y="52" class="t">Ingest</text></g>
+    <line x1="446" y1="36" x2="476" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(462,0)"><rect width="130" height="72" rx="12" class="chip-h"/>
+      <text x="14" y="26" class="n-h">04 · HYDRADB</text>
+      <text x="14" y="52" class="t">Retrieve</text></g>
+    <line x1="600" y1="36" x2="630" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(616,0)"><rect width="130" height="72" rx="12" class="chip-h"/>
+      <text x="14" y="26" class="n-h">05 · HYDRADB</text>
+      <text x="14" y="52" class="t">Graph path</text></g>
+    <line x1="754" y1="36" x2="784" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(770,0)"><rect width="130" height="72" rx="12" class="chip"/>
+      <text x="14" y="26" class="n">06</text>
+      <text x="14" y="52" class="t">Decide</text></g>
+    <line x1="908" y1="36" x2="938" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(924,0)"><rect width="130" height="72" rx="12" class="chip"/>
+      <text x="14" y="26" class="n">07</text>
+      <text x="14" y="52" class="t">Surface</text></g>
+    <line x1="1062" y1="36" x2="1092" y2="36" class="line" marker-end="url(#arr)"/>
+
+    <g transform="translate(1078,0)"><rect width="130" height="72" rx="12" class="chip"/>
+      <text x="14" y="26" class="n">08</text>
+      <text x="14" y="52" class="t">Learn</text></g>
+  </g>
+</svg>

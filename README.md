@@ -87,28 +87,64 @@ npm start
 Only numeric score data and posture reasons are sent to the review API. Webcam
 frames are not sent.
 
-## HydraDB Demo
+## HydraDB-grounded Wellness Loop
 
-`hydradb-demo.html` is a visual walkthrough of the intended graph-memory layer.
-It shows how sessions, postures, focus states, interventions, and feedback can
-be stored as connected nodes so a wellness agent can recall what worked in a
-similar situation before surfacing a suggestion.
+A second mode of this app frames the posture loop around an external
+graph-memory layer (**HydraDB**). The desktop agent **listens before it
+speaks**: it samples the camera + desktop signals once a minute, writes them
+into HydraDB as a graph, and only surfaces a suggestion when HydraDB can
+return an intervention that already worked for this user.
 
-The conceptual workflow is:
+### Workflow — one loop per minute
+
+Steps **3–5 run inside HydraDB**.
+
+![Workflow](./workflow.svg)
+
+| Step | Where | What |
+| :--- | :---- | :--- |
+| 01 Capture | local | camera frame + active app + focus signals |
+| 02 Score risk | local | posture indicators → integer score |
+| **03 Ingest** | **HydraDB** | append nodes for posture / app / focus to this session |
+| **04 Retrieve** | **HydraDB** | pull similar past sessions + their interventions |
+| **05 Graph path** | **HydraDB** | return one reasoning path the agent can cite |
+| 06 Decide | LLM | stay silent, or pick the intervention from the path |
+| 07 Surface | UI | grounded suggestion (or "you're in flow") |
+| 08 Learn | HydraDB | feedback edge written back, ready for next loop |
+
+### Where HydraDB is used — schema and memory flow
+
+Memory is a **graph, not a log**. Sessions connect apps, postures, focus,
+interventions and feedback, so the agent can recall *what worked last time*
+instead of replaying *what happened*.
+
+![HydraDB graph schema](./hydradb-graph.svg)
+
+Inputs into HydraDB each minute:
+
+- `posture frame` — score + neck/shoulder angles from the camera loop
+- `active_app` — current foreground app and its category
+- `focus signals` — focus trend, window-switch rate
+
+Outputs HydraDB hands back to the agent:
+
+- `similar past cases` — sessions with the same posture + app context
+- `graph context` — connected session / app / intervention nodes
+- `previous feedback` — what *this* user accepted before
+- `reasoning path` — one explainable chain the LLM grounds its reply in
+
+The reasoning path returned to the agent:
 
 ```text
-01 Capture -> 02 Score risk -> 03 HydraDB Ingest -> 04 HydraDB Retrieve
--> 05 HydraDB Graph path -> 06 Decide -> 07 Surface -> 08 Learn
+PostureEvent → TRIGGERED → Intervention → RECEIVED → Feedback
 ```
 
-The reasoning path returned to the agent looks like:
+### Detailed visual deck
 
-```text
-PostureEvent -> TRIGGERED -> Intervention -> RECEIVED -> Feedback
-```
-
-Open [hydradb-demo.html](./hydradb-demo.html) in any modern browser to see the
-schema, relations, and memory flow.
+[`hydradb-demo.html`](./hydradb-demo.html) is the full single-page deck
+(hero, workflow strip, graph, behavior cards, and a 4-beat demo timeline).
+Download and open it in a browser for the styled version — the diagrams
+above are extracted from it.
 
 ## Notes
 

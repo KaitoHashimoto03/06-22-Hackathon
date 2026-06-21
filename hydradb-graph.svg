@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Arial, sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6240e0"/>
+    </marker>
+    <style>
+      .panel    { fill:#f1edff; stroke:#b9a8f0; stroke-width:1.5; }
+      .panel2   { fill:#ffffff; stroke:#ccd6ea; stroke-width:1.2; }
+      .banner   { fill:#6240e0; }
+      .banner-t { font-size:14px; font-weight:800; fill:#ffffff; letter-spacing:0.10em; }
+      .h2       { font-size:22px; font-weight:800; fill:#0f1a36; }
+      .eyebrow  { font-size:11px; font-weight:800; fill:#6240e0; letter-spacing:0.16em; }
+      .lead     { font-size:13px; fill:#3a4a72; }
+      .pipe-lbl { font-size:11px; font-weight:800; fill:#6240e0; letter-spacing:0.14em; }
+      .item     { fill:#ffffff; stroke:#b9a8f0; stroke-width:1; }
+      .item-t   { font-size:12px; font-weight:600; fill:#0f1a36; }
+      .node     { stroke:#b9a8f0; stroke-width:1.5; }
+      .node-t   { font-size:13px; font-weight:800; fill:#0f1a36; }
+      .node-s   { font-size:11px; fill:#6b7ea3; }
+      .user-fill{ fill:#dde5ff; }
+      .sess-fill{ fill:#cdeee6; }
+      .app-fill { fill:#ffe2b4; }
+      .post-fill{ fill:#ffd8d2; }
+      .focus-fill{ fill:#dde5ff; }
+      .interv-fill{ fill:#e1d8ff; }
+      .feed-fill{ fill:#cdeee6; }
+      .edge     { stroke:#6240e0; stroke-width:1.6; fill:none; }
+      .edge-lbl { font-size:10.5px; font-weight:700; fill:#6240e0; }
+      .path     { fill:#ffffff; stroke:#b9a8f0; stroke-width:1.2; }
+      .path-t   { font-size:13px; font-weight:700; fill:#0f1a36; }
+      .path-arr { font-size:14px; font-weight:800; fill:#6240e0; }
+      .path-hint{ font-size:12px; fill:#6b7ea3; }
+    </style>
+  </defs>
+
+  <rect x="8" y="8" width="1264" height="704" rx="18" class="panel"/>
+
+  <rect x="24" y="22" width="220" height="26" rx="13" class="banner"/>
+  <text x="44" y="40" class="banner-t">⬢ HydraDB · Graph Memory Layer</text>
+
+  <text x="32" y="80" class="eyebrow">WHAT LIVES INSIDE HYDRADB</text>
+  <text x="32" y="112" class="h2">Memory is a graph, not a log.</text>
+  <text x="32" y="138" class="lead">Every session connects apps, postures, focus, interventions and feedback —</text>
+  <text x="32" y="156" class="lead">so the agent can recall what worked last time, not just what happened.</text>
+
+  <g transform="translate(880,72)">
+    <rect width="120" height="80" rx="10" class="panel2"/>
+    <text x="60" y="34" text-anchor="middle" font-size="20" font-weight="800" fill="#6240e0">5</text>
+    <text x="60" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#3a4a72">node types</text>
+  </g>
+  <g transform="translate(1010,72)">
+    <rect width="120" height="80" rx="10" class="panel2"/>
+    <text x="60" y="34" text-anchor="middle" font-size="20" font-weight="800" fill="#6240e0">7</text>
+    <text x="60" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#3a4a72">relations</text>
+  </g>
+  <g transform="translate(1140,72)">
+    <rect width="120" height="80" rx="10" class="panel2"/>
+    <text x="60" y="34" text-anchor="middle" font-size="20" font-weight="800" fill="#6240e0">1</text>
+    <text x="60" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#3a4a72">reasoning path</text>
+  </g>
+
+  <text x="32" y="206" class="pipe-lbl">INPUTS → HYDRADB</text>
+  <g transform="translate(32,218)">
+    <rect width="160" height="34" rx="10" class="item"/>
+    <text x="80" y="22" text-anchor="middle" class="item-t">posture frame</text>
+  </g>
+  <g transform="translate(208,218)">
+    <rect width="160" height="34" rx="10" class="item"/>
+    <text x="80" y="22" text-anchor="middle" class="item-t">active_app</text>
+  </g>
+  <g transform="translate(384,218)">
+    <rect width="160" height="34" rx="10" class="item"/>
+    <text x="80" y="22" text-anchor="middle" class="item-t">focus signals</text>
+  </g>
+  <text x="272" y="278" text-anchor="middle" fill="#6240e0" font-size="16" font-weight="800">▼</text>
+
+  <rect x="32" y="290" width="1216" height="280" rx="14" fill="#ffffff" stroke="#b9a8f0" stroke-width="1.2"/>
+
+  <line x1="180" y1="430" x2="300" y2="430" class="edge" marker-end="url(#ah)"/>
+  <text x="200" y="420" class="edge-lbl">HAS_SESSION</text>
+
+  <line x1="430" y1="410" x2="600" y2="350" class="edge" marker-end="url(#ah)"/>
+  <text x="460" y="368" class="edge-lbl">USED_APP</text>
+
+  <line x1="440" y1="430" x2="600" y2="430" class="edge" marker-end="url(#ah)"/>
+  <text x="468" y="422" class="edge-lbl">HAS_POSTURE_EVENT</text>
+
+  <line x1="430" y1="450" x2="600" y2="510" class="edge" marker-end="url(#ah)"/>
+  <text x="460" y="500" class="edge-lbl">HAS_FOCUS_STATE</text>
+
+  <line x1="730" y1="425" x2="900" y2="425" class="edge" marker-end="url(#ah)"/>
+  <text x="760" y="416" class="edge-lbl">TRIGGERED</text>
+
+  <line x1="730" y1="505" x2="900" y2="445" class="edge" marker-end="url(#ah)"/>
+  <text x="760" y="498" class="edge-lbl">TRIGGERED</text>
+
+  <line x1="970" y1="455" x2="970" y2="525" class="edge" marker-end="url(#ah)"/>
+  <text x="978" y="496" class="edge-lbl">RECEIVED</text>
+
+  <g transform="translate(70,400)">
+    <rect width="110" height="60" rx="14" class="node user-fill"/>
+    <text x="55" y="26" text-anchor="middle" class="node-t">User</text>
+    <text x="55" y="46" text-anchor="middle" class="node-s">identity</text>
+  </g>
+  <g transform="translate(296,400)">
+    <rect width="144" height="60" rx="14" class="node sess-fill"/>
+    <text x="72" y="26" text-anchor="middle" class="node-t">WorkSession</text>
+    <text x="72" y="46" text-anchor="middle" class="node-s">focus window</text>
+  </g>
+  <g transform="translate(596,320)">
+    <rect width="136" height="60" rx="14" class="node app-fill"/>
+    <text x="68" y="26" text-anchor="middle" class="node-t">AppUsage</text>
+    <text x="68" y="46" text-anchor="middle" class="node-s">app · category</text>
+  </g>
+  <g transform="translate(596,400)">
+    <rect width="136" height="60" rx="14" class="node post-fill"/>
+    <text x="68" y="26" text-anchor="middle" class="node-t">PostureEvent</text>
+    <text x="68" y="46" text-anchor="middle" class="node-s">score · angles</text>
+  </g>
+  <g transform="translate(596,480)">
+    <rect width="136" height="60" rx="14" class="node focus-fill"/>
+    <text x="68" y="26" text-anchor="middle" class="node-t">FocusState</text>
+    <text x="68" y="46" text-anchor="middle" class="node-s">trend · switches</text>
+  </g>
+  <g transform="translate(900,400)">
+    <rect width="140" height="60" rx="14" class="node interv-fill"/>
+    <text x="70" y="26" text-anchor="middle" class="node-t">Intervention</text>
+    <text x="70" y="46" text-anchor="middle" class="node-s">walk · stretch</text>
+  </g>
+  <g transform="translate(900,525)">
+    <rect width="140" height="60" rx="14" class="node feed-fill"/>
+    <text x="70" y="26" text-anchor="middle" class="node-t">Feedback</text>
+    <text x="70" y="46" text-anchor="middle" class="node-s">helpful · no</text>
+  </g>
+
+  <text x="32" y="608" class="pipe-lbl">HYDRADB → AGENT</text>
+  <g transform="translate(32,620)">
+    <rect width="180" height="34" rx="10" class="item"/>
+    <text x="90" y="22" text-anchor="middle" class="item-t">similar past cases</text>
+  </g>
+  <g transform="translate(228,620)">
+    <rect width="170" height="34" rx="10" class="item"/>
+    <text x="85" y="22" text-anchor="middle" class="item-t">graph context</text>
+  </g>
+  <g transform="translate(414,620)">
+    <rect width="190" height="34" rx="10" class="item"/>
+    <text x="95" y="22" text-anchor="middle" class="item-t">previous feedback</text>
+  </g>
+  <g transform="translate(620,620)">
+    <rect width="170" height="34" rx="10" class="item"/>
+    <text x="85" y="22" text-anchor="middle" class="item-t">reasoning path</text>
+  </g>
+
+  <rect x="32" y="668" width="1216" height="36" rx="10" class="path"/>
+  <text x="48" y="691" class="path-t">Reasoning path returned to the agent:  PostureEvent</text>
+  <text x="500" y="691" class="path-arr">→</text>
+  <text x="518" y="691" class="path-t">TRIGGERED</text>
+  <text x="612" y="691" class="path-arr">→</text>
+  <text x="630" y="691" class="path-t">Intervention</text>
+  <text x="730" y="691" class="path-arr">→</text>
+  <text x="748" y="691" class="path-t">RECEIVED</text>
+  <text x="828" y="691" class="path-arr">→</text>
+  <text x="846" y="691" class="path-t">Feedback</text>
+  <text x="918" y="691" class="path-hint">— grounds the next suggestion in what worked before.</text>
+</svg>
