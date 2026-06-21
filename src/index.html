@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Posture Review</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="camera-panel" aria-label="Camera posture capture">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">MacBook camera posture loop</p>
+            <h1>Posture Review</h1>
+          </div>
+          <div class="status-pill" id="cameraStatus">Camera idle</div>
+        </div>
+
+        <div class="video-stage">
+          <video id="camera" autoplay playsinline muted></video>
+          <canvas id="overlay"></canvas>
+          <div class="empty-state" id="emptyState">
+            <strong>No camera feed yet</strong>
+            <span>Start the camera, then capture once or let the 3 second loop run.</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="startCamera" type="button">Start camera</button>
+          <button id="captureNow" type="button" disabled>Capture now</button>
+          <button id="toggleAuto" type="button" disabled>Start auto loop</button>
+          <label class="interval-control">
+            Interval
+            <input id="intervalSeconds" type="number" min="1" step="1" value="3" />
+            sec
+          </label>
+        </div>
+      </section>
+
+      <aside class="insight-panel" aria-label="Current posture score">
+        <div class="score-block">
+          <p class="eyebrow">Current score</p>
+          <div class="score-row">
+            <strong id="scoreValue">--</strong>
+            <span id="scoreGrade">waiting</span>
+          </div>
+          <p id="scoreReason">No capture yet.</p>
+        </div>
+
+        <div class="capture-preview-box">
+          <div class="panel-heading">
+            <p class="eyebrow">Capture frame</p>
+            <span id="captureTimestamp">waiting</span>
+          </div>
+          <canvas id="capturePreview" width="640" height="360"></canvas>
+        </div>
+
+        <div class="metric-grid">
+          <div>
+            <span>Pose</span>
+            <strong id="metricFace">--</strong>
+          </div>
+          <div>
+            <span>Center</span>
+            <strong id="metricCenter">--</strong>
+          </div>
+          <div>
+            <span>Distance</span>
+            <strong id="metricDistance">--</strong>
+          </div>
+          <div>
+            <span>Tilt</span>
+            <strong id="metricTilt">--</strong>
+          </div>
+        </div>
+
+        <div class="breakdown-box">
+          <p class="eyebrow">Score breakdown</p>
+          <div id="scoreBreakdown" class="score-breakdown"></div>
+        </div>
+
+        <div class="review-box">
+          <div class="panel-heading">
+            <p class="eyebrow">Review</p>
+            <button id="reviewNow" type="button" disabled>Review now</button>
+          </div>
+          <p id="reviewText">Capture posture data and I will review the trend.</p>
+        </div>
+      </aside>
+
+      <section class="timeline-panel" aria-label="Posture score timeline">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Timeline</p>
+            <h2>Score history</h2>
+          </div>
+          <div class="timeline-actions">
+            <button id="exportHistory" type="button" disabled>Export JSON</button>
+            <button id="clearHistory" type="button" disabled>Clear</button>
+          </div>
+        </div>
+        <canvas id="timeline" height="180"></canvas>
+      </section>
+    </main>
+
+    <script src="./postureScoring.js"></script>
+    <script src="./localReview.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
