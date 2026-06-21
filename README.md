@@ -16,29 +16,25 @@ The current desktop app can:
 
 This is a work posture helper, not a medical posture diagnosis.
 
-## Run
+## HydraDB-grounded Wellness Loop
 
-```bash
-cd /Users/keisuke.a.takiguchi/Workspace/Personal/hackason-dev
-npm install
-npm start
-```
+A second mode of this app frames the posture loop around an external
+graph-memory layer (**HydraDB**). The desktop agent **listens before it
+speaks**: it samples the camera + desktop signals once a minute, writes them
+into HydraDB as a graph, and only surfaces a suggestion when HydraDB can
+return an intervention that already worked for this user.
 
-macOS will ask for camera permission when you press `Start camera`.
+### Posture scoring in action — what steps 01–02 look like
 
-## Checks
+The clip below is the camera + pose-estimation step running on a MacBook.
+The visible overlay (face / shoulder landmarks) is what the agent *sees*;
+in the background each frame is silently reduced to one integer in `0–100`
+and that score — plus the active app and focus signals — is what gets
+pushed into HydraDB at step **03 Ingest** every minute.
 
-```bash
-npm run check
-npm test
-```
+https://github.com/user-attachments/assets/c6168629-4de0-42fe-adff-1f9e8029a6da
 
-`npm test` does not require Electron or camera access.
-
-## Posture Score
-
-The score is always an integer from 0 to 100. It is the sum of 10 indicators,
-each scored from 0 to 10:
+The score is the sum of **10 indicators**, each scored from 0 to 10:
 
 - Face visible
 - Shoulder line
@@ -61,39 +57,9 @@ from signals that are visible from the built-in camera: the head being low,
 too close to the camera, or forward relative to the shoulders when MediaPipe
 world landmarks are available.
 
-## LLM Review
-
-By default the app uses a local review function and sends no image data outside
-the machine.
-
-To enable an OpenAI-compatible chat review, set all of these:
-
-```bash
-export OPENAI_BASE_URL="https://api.openai.com/v1"
-export OPENAI_API_KEY="..."
-export OPENAI_MODEL="your-chat-model"
-npm start
-```
-
-You can also use app-specific names:
-
-```bash
-export POSTURE_REVIEW_API_URL="http://127.0.0.1:8080/v1/chat/completions"
-export POSTURE_REVIEW_API_KEY="..."
-export POSTURE_REVIEW_MODEL="..."
-npm start
-```
-
-Only numeric score data and posture reasons are sent to the review API. Webcam
-frames are not sent.
-
-## HydraDB-grounded Wellness Loop
-
-A second mode of this app frames the posture loop around an external
-graph-memory layer (**HydraDB**). The desktop agent **listens before it
-speaks**: it samples the camera + desktop signals once a minute, writes them
-into HydraDB as a graph, and only surfaces a suggestion when HydraDB can
-return an intervention that already worked for this user.
+Nothing in the clip leaves the machine: the score is computed on-device, and
+only the numeric score + reasons are ever sent to an LLM review endpoint
+(and only when one is configured — see [LLM Review](#llm-review)).
 
 ### Workflow — one loop per minute
 
@@ -111,22 +77,6 @@ Steps **3–5 run inside HydraDB**.
 | 06 Decide | LLM | stay silent, or pick the intervention from the path |
 | 07 Surface | UI | grounded suggestion (or "you're in flow") |
 | 08 Learn | HydraDB | feedback edge written back, ready for next loop |
-
-### Posture scoring in action — what steps 01–02 look like
-
-The clip below is the camera + pose-estimation step running on a MacBook.
-The visible overlay (face / shoulder landmarks) is what the agent *sees*;
-in the background each frame is silently turned into the **10 posture
-indicators** described in the [Posture Score](#posture-score) section
-above and reduced to one integer in `0–100`. That score, plus the active
-app and focus signals, is what gets pushed into HydraDB at step **03
-Ingest** every minute.
-
-https://github.com/user-attachments/assets/c6168629-4de0-42fe-adff-1f9e8029a6da
-
-Nothing in this clip is sent to a server: the score is computed on-device
-and only the numeric score + reasons leave the machine (and only when an
-LLM review endpoint is configured — see [LLM Review](#llm-review)).
 
 ### Where HydraDB is used — schema and memory flow
 
@@ -162,6 +112,32 @@ PostureEvent → TRIGGERED → Intervention → RECEIVED → Feedback
 Download and open it in a browser for the styled version — the diagrams
 above are extracted from it.
 
+## LLM Review
+
+By default the app uses a local review function and sends no image data outside
+the machine.
+
+To enable an OpenAI-compatible chat review, set all of these:
+
+```bash
+export OPENAI_BASE_URL="https://api.openai.com/v1"
+export OPENAI_API_KEY="..."
+export OPENAI_MODEL="your-chat-model"
+npm start
+```
+
+You can also use app-specific names:
+
+```bash
+export POSTURE_REVIEW_API_URL="http://127.0.0.1:8080/v1/chat/completions"
+export POSTURE_REVIEW_API_KEY="..."
+export POSTURE_REVIEW_MODEL="..."
+npm start
+```
+
+Only numeric score data and posture reasons are sent to the review API. Webcam
+frames are not sent.
+
 ## Notes
 
 The MediaPipe pose model is stored at `assets/models/pose_landmarker_lite.task`
@@ -170,3 +146,22 @@ Chromium's `FaceDetector` when pose detection is unavailable. If neither pose
 nor face detection is available, the app falls back to a rough on-device image
 heuristic. That fallback is useful for demos, but the score is less reliable
 than the pose model.
+
+## Run
+
+```bash
+cd /Users/keisuke.a.takiguchi/Workspace/Personal/hackason-dev
+npm install
+npm start
+```
+
+macOS will ask for camera permission when you press `Start camera`.
+
+## Checks
+
+```bash
+npm run check
+npm test
+```
+
+`npm test` does not require Electron or camera access.
