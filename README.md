@@ -112,6 +112,25 @@ Steps **3–5 run inside HydraDB**.
 | 07 Surface | UI | grounded suggestion (or "you're in flow") |
 | 08 Learn | HydraDB | feedback edge written back, ready for next loop |
 
+### Posture scoring in action — what steps 01–02 look like
+
+The clip below is the camera + pose-estimation step running on a MacBook.
+The visible overlay (face / shoulder landmarks) is what the agent *sees*;
+in the background each frame is silently turned into the **10 posture
+indicators** described in the [Posture Score](#posture-score) section
+above and reduced to one integer in `0–100`. That score, plus the active
+app and focus signals, is what gets pushed into HydraDB at step **03
+Ingest** every minute.
+
+<video src="https://github.com/KaitoHashimoto03/06-22-Hackathon/raw/main/posture-scoring.mp4" controls muted playsinline width="100%">
+  Your browser doesn't render embedded video — open
+  <a href="./posture-scoring.mp4">posture-scoring.mp4</a> directly.
+</video>
+
+Nothing in this clip is sent to a server: the score is computed on-device
+and only the numeric score + reasons leave the machine (and only when an
+LLM review endpoint is configured — see [LLM Review](#llm-review)).
+
 ### Where HydraDB is used — schema and memory flow
 
 Memory is a **graph, not a log**. Sessions connect apps, postures, focus,
