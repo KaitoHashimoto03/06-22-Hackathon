@@ -21,20 +21,50 @@ Desktop Wellness Agent looks after your wellbeing while you work.
 
 ## What you actually see
 
-![Komorebi agent UI — live posture tracking, a posture nudge, and a generated walk plan with checkpoints](./agent-ui.png)
+The agent lives as a **macOS overlay panel** that floats above every other app — you never switch contexts to use it. Three things happen in that panel: it **nudges** you in the moment, it shows you **how you're trending over time**, and it pulls in the **integrations** that let it plan around your day.
 
-Three surfaces live alongside your work, all on-device:
+### 1. OS-level overlay nudges — *"Why now"*, not *"time to stand!"*
 
-- **Komorebi Agent panel** *(right, middle)* — the always-on HUD: a live posture skeleton, the current **Posture Score** (`84/100` here), a **Focus Flow** read (`Deep`), and a focus timeline of the last few minutes. The session timer shows how long the agent has been quietly watching.
-- **Detection nudges** *(top right)* — short, specific notifications when something slips. Not *"time to stand!"*; instead *"Your shoulders are uneven. Try rolling them back slightly."*
-- **Walk plans with checkpoints** *(left)* — when the agent decides a reset walk is the right intervention, it doesn't just say *"go for a walk."* It picks a real route (here a 640m loop through Yoyogi Park, sourced via Google Places / Directions) and turns it into a concrete **5-step TODO**:
-  1. `0:00` Stand up, roll shoulders 3 times
-  2. `1:30` Deep breath at the signal — 4 in, 6 out
-  3. `4:00` 20-20-20 rule at the park entrance — 20 ft for 20 s
-  4. `6:30` Hydration checkpoint
-  5. `8:00` Re-enter focus, posture reset
+<p align="center">
+  <img src="./overlay-nudge.jpg" alt="Wellness agent overlay — Time to reset card with posture, focus, and a Yoyogi Park walk preview" width="46%">
+  &nbsp;
+  <img src="./walk-plan.jpg" alt="Yoyogi Park Loop walk plan with checkpoint TODOs" width="46%">
+</p>
 
-The **UP NEXT** card surfaces the suggestion with the trigger it was grounded on (*"45m since last break"*) so you always see *why* the agent is speaking. *"Komorebi is watching"* sits in the corner whenever the loop is active — you always know when the agent is on, and you can dismiss any nudge without ceremony.
+The overlay reads your state continuously and only speaks when it has a reason. When it does, it explains *why*:
+
+> **Time to reset** — *47 min of leaning in — your focus is starting to slip. Reset now and head into the afternoon peak sharp. You recover best by walking.*
+
+It also picks an actual intervention, not a generic prompt. *"Let's walk"* opens a real route (here a ~640m **Yoyogi Park Loop**, sourced via **Google Places / Directions**) turned into a **TO DO checkpoint list** — *Stand up · Breathe at the crossing · Look up at the park gate · Drink some water · Return to desk*. You hit **Start route** and the plan walks you through it.
+
+### 2. Performance over time — closed-loop measurement
+
+<p align="center">
+  <img src="./performance-trend.jpg" alt="Performance over time — 7-day trend of Posture and Focus scores with calendar correlation panel" width="60%">
+</p>
+
+Every minute the agent watches is also a measurement. The **TREND · 7 DAYS** view plots your **Posture score** and **Focus score** across the week and writes the change in plain language:
+
+> **Posture is up +16 this week** — the stand-up habit is working. Focus tracks it closely, with the usual **afternoon dip**.
+
+The **Calendar correlation** panel takes the same trend and asks *what predicts a slump?* — so the agent can start protecting your peak window before a 3pm pitch instead of reacting after.
+
+### 3. Integrations — data sources that make the agent personal
+
+<p align="center">
+  <img src="./integrations.jpg" alt="Integrations panel — Google Calendar, Apple Health, on-device camera, and HydraDB memory" width="50%">
+</p>
+
+> **Connect your data to plan the day backward.**
+
+| Source | Status | What it adds |
+| :--- | :--- | :--- |
+| **Google Calendar** | Connect | Reads your schedule and plans the day backward so you peak for key events (performance timing). |
+| **Apple Health** | Paired / *Coming soon* | HRV, sleep and heart rate to measure recovery after each nudge and sharpen the policy. Syncs via an iOS companion. |
+| **Camera (posture)** | On-device · Active now | Continuous posture sensing with MediaPipe. **Frames are discarded after processing** — only numbers are kept. |
+| **HydraDB memory** | Learning · Active now | Stores interventions and outcomes to compound a policy that fits *you*. |
+
+The first two integrations let the agent **plan backward from your day** (calendar) and **close the loop with biometric recovery signals** (Apple Health). The last two are always running in the background — the camera supplies what the agent sees right now, and HydraDB is what turns each minute into accumulating personal knowledge.
 
 ## How HydraDB powers it (Memory / Context)
 
