@@ -19,6 +19,23 @@ Desktop Wellness Agent looks after your wellbeing while you work.
   - **Acts** — protects a recovery window and designs the actual walking route for you.
   - **Thinks ahead** — reads your calendar, finds the moments that matter (a 3pm pitch), and works backward so your wellbeing is managed toward peak when it counts.
 
+## What you actually see
+
+![Komorebi agent UI — live posture tracking, a posture nudge, and a generated walk plan with checkpoints](./agent-ui.png)
+
+Three surfaces live alongside your work, all on-device:
+
+- **Komorebi Agent panel** *(right, middle)* — the always-on HUD: a live posture skeleton, the current **Posture Score** (`84/100` here), a **Focus Flow** read (`Deep`), and a focus timeline of the last few minutes. The session timer shows how long the agent has been quietly watching.
+- **Detection nudges** *(top right)* — short, specific notifications when something slips. Not *"time to stand!"*; instead *"Your shoulders are uneven. Try rolling them back slightly."*
+- **Walk plans with checkpoints** *(left)* — when the agent decides a reset walk is the right intervention, it doesn't just say *"go for a walk."* It picks a real route (here a 640m loop through Yoyogi Park, sourced via Google Places / Directions) and turns it into a concrete **5-step TODO**:
+  1. `0:00` Stand up, roll shoulders 3 times
+  2. `1:30` Deep breath at the signal — 4 in, 6 out
+  3. `4:00` 20-20-20 rule at the park entrance — 20 ft for 20 s
+  4. `6:30` Hydration checkpoint
+  5. `8:00` Re-enter focus, posture reset
+
+The **UP NEXT** card surfaces the suggestion with the trigger it was grounded on (*"45m since last break"*) so you always see *why* the agent is speaking. *"Komorebi is watching"* sits in the corner whenever the loop is active — you always know when the agent is on, and you can dismiss any nudge without ceremony.
+
 ## How HydraDB powers it (Memory / Context)
 
 **Memory is a graph, not a log.** In HydraDB we connect every `WorkSession`, `PostureEvent`, `FocusState`, `Intervention` and `Feedback`. Before the agent speaks, it recalls *what worked* — not just what happened — and gets back a reasoning path (`PostureEvent → Intervention → Feedback`) that grounds the next suggestion in evidence, not a guess. Every accepted or dismissed nudge flows back into the graph, so the care **compounds** and gets more personal each day. Without this memory, it's just another generic reminder.
