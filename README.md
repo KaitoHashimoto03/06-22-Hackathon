@@ -1,28 +1,57 @@
-# Wellness Agent Desktop
+# Desktop Wellness Agent
 
-Electron desktop app for a MacBook-camera wellness loop, plus a HydraDB workflow
-demo page.
+> An agent that looks after your wellbeing while you work — and learns what restores you.
 
-The current desktop app can:
+A desktop wellness agent that reads your body from your webcam, learns what actually restores your focus, and acts on it — grounded by a graph memory in **HydraDB**, so its care gets more personal every day.
 
-- open the webcam in an Electron desktop app
-- capture posture snapshots manually or every 3 seconds by default
-- run MediaPipe Pose Landmarker when available, with face detection as fallback
-- score the frame as 10 visible indicators worth 10 points each
-- show the captured frame used for scoring with the pose skeleton, detection box, and center guide
-- show score history in a canvas timeline
-- generate a review from a local heuristic, or from an OpenAI-compatible chat endpoint when configured
-- export history JSON into `outputs/`
+## Inspiration
 
-This is a work posture helper, not a medical posture diagnosis.
+We spend nine to ten hours a day at a desk, and nothing actually looks after the body doing the work. The "wellness" tools that exist just nag — the same generic *"time to stand!"* for everyone, every day. They don't know you, and they remember nothing. We wanted the opposite: an agent that quietly watches over you, learns what works for you, and acts on it. **Care, not a timer.**
 
-## HydraDB-grounded Wellness Loop
+## What it does
 
-A second mode of this app frames the posture loop around an external
-graph-memory layer (**HydraDB**). The desktop agent **listens before it
-speaks**: it samples the camera + desktop signals once a minute, writes them
-into HydraDB as a graph, and only surfaces a suggestion when HydraDB can
-return an intervention that already worked for this user.
+Desktop Wellness Agent looks after your wellbeing while you work.
+
+- **Sees you on-device** — reads posture, fatigue and focus from your webcam (~1/min). Images are discarded; only numbers are kept.
+- **Cares, doesn't nag** — silent when you're fine; a gentle nudge (stretch, breath, or a short reset walk) when your body slumps or your focus slides. It stays quiet in meetings and backs off if you keep dismissing it.
+- **Is a real agent** — it decides, acts, and learns:
+  - **Learns what restores you** (a walk over a stretch; 2pm not 4pm) by closing the loop — suggest → measure recovery (posture and focus today; Apple Health HRV/HR via the planned phone companion) → converge on your personal policy.
+  - **Acts** — protects a recovery window and designs the actual walking route for you.
+  - **Thinks ahead** — reads your calendar, finds the moments that matter (a 3pm pitch), and works backward so your wellbeing is managed toward peak when it counts.
+
+## How HydraDB powers it (Memory / Context)
+
+**Memory is a graph, not a log.** In HydraDB we connect every `WorkSession`, `PostureEvent`, `FocusState`, `Intervention` and `Feedback`. Before the agent speaks, it recalls *what worked* — not just what happened — and gets back a reasoning path (`PostureEvent → Intervention → Feedback`) that grounds the next suggestion in evidence, not a guess. Every accepted or dismissed nudge flows back into the graph, so the care **compounds** and gets more personal each day. Without this memory, it's just another generic reminder.
+
+## The data moat
+
+It fuses signals no consumer product sees together — your **body** (camera), your **goals** (calendar), and, with the upcoming phone companion, your **biometrics** (Apple Health) — into one model of how you actually perform.
+
+## How we built it (shipped)
+
+- **Desktop** — Electron (transparent, always-on-top HUD overlay) + Vite + React + TypeScript
+- **Perception** — MediaPipe Pose (on-device posture) + Claude vision (sparse fatigue / complexion reads)
+- **Reasoning** — Nebius LLM
+- **Memory** — HydraDB graph memory (recall + learn loop)
+- **Context** — Google Calendar + Google Places / Directions (route design)
+
+## Challenges
+
+- Making triggers genuinely helpful and never annoying — getting suppression (meetings, flow, cooldowns) and receptivity-learning right.
+- Honest closed-loop framing: it's a per-person personalization heuristic, not rigorous causal proof.
+- Privacy: making on-device, frames-discarded perception real and visible.
+
+## Accomplishments
+
+- An agent that **decides, acts, and learns** — not just a suggester.
+- HydraDB as **load-bearing graph memory** that returns a reasoning path.
+- **On-device perception with images discarded** — privacy-first by design.
+
+---
+
+## The loop in detail
+
+The rest of this README walks through that loop — what the camera sees, how each minute lands in HydraDB, and the reasoning path the graph hands back.
 
 ### Posture scoring in action — what steps 01–02 look like
 
